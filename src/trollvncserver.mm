@@ -71,7 +71,7 @@ static double gKeepAliveSec = 0.0; // 15..86400
 static BOOL gClipboardEnabled = YES;
 static BOOL gIsDaemonMode = NO; // set when launched with -daemon
 
-static double gScale = 1.0; // 0 < scale <= 1.0, 1.0 = no scaling
+static double gScale = 0.3; // 0 < scale <= 1.0, 1.0 = no scaling, default 0.3 (30%)
 // Preferred frame rate range (0 = unspecified)
 static int gFpsMin = 0;
 static int gFpsPref = 0;
