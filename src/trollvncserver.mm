@@ -4133,9 +4133,14 @@ static void setXCutTextLatin1(char *str, int len, rfbClientPtr cl) {
 
     TVLog(@"Clipboard: received client cut text (Latin-1) len=%d", len);
     NSData *data = [NSData dataWithBytes:str length:(NSUInteger)len];
-    NSString *s = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
-    if (!s)
-        s = @"";
+    // 优先尝试 UTF-8 解码（支持中文）
+    NSString *s = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    if (!s) {
+        // 如果 UTF-8 失败，回退到 Latin-1
+        s = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+        if (!s)
+            s = @"";
+    }
 
     dispatch_async(dispatch_get_main_queue(), ^{
         gClipboardSuppressSend.fetch_add(1, std::memory_order_relaxed);
